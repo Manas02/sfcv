@@ -55,4 +55,8 @@ compute [MCE-18](https://pubs.acs.org/doi/abs/10.1021/acs.jmedchem.9b00004).
 Run [03_Plots_Table_target_properties.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/03_Plots_Table_target_properties.ipynb)
 to get the summary of properties as a table and to plot the distributions.
 
+### 5. Implementing `SortedStepForwardCV` and `UnsortedStepForwardCV`
+
+- Run [04_Implementation_SFCV.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/04_Implementation_SFCV.ipynb)
+  to visualise how SortedStepForwardCV and UnsortedStepForwardCV work.
 
