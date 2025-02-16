@@ -22,14 +22,8 @@ python3.11 -m venv .venv
 pip install -r requirements.txt
 ```
 
-### Install Requirements
+## Dataset
 
-```shell
-
-```
-
-
-
-
-
+Landrum &
+Riniker [[Paper](https://pubs.acs.org/doi/10.1021/acs.jcim.4c00049) | [Data](https://github.com/rinikerlab/overlapping_assays/tree/main/datasets/source_data)]
 

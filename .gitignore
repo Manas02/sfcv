@@ -1,5 +1,6 @@
-benchmark/data/processed/
-benchmark/data/results/
+benchmark/data/*
+!benchmark/data/raw/
+!benchmark/data/Ki_datasets.yaml
 
 .DS_Store
 
