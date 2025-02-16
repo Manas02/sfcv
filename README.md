@@ -35,7 +35,7 @@ above-mentioned dataset and to standardize the SMILES in those files.
 
 ### 2. Predicting LogP, LogD and Computing MCE-18
 
-- Follow that with running [01_Data_add_LogP_LogD_MCE18.ipynb
+- Follow that by running [01_Data_add_LogP_LogD_MCE18.ipynb
   ](https://github.com/Manas02/sfcv/blob/main/notebook/01_Data_add_LogP_LogD_MCE18.ipynb)
 to predict and add data for
 CrippenLogP ([rdkit](https://www.rdkit.org/docs/GettingStartedInPython.html#descriptor-calculation)),
@@ -48,3 +48,11 @@ compute [MCE-18](https://pubs.acs.org/doi/abs/10.1021/acs.jmedchem.9b00004).
   ](https://github.com/Manas02/sfcv/blob/main/notebook/02_Table_mol_per_target_before_after_standardization.ipynb)
   to generate the table and parity plot. The results are saved in `benchmark/results/tables` and
   `benchmark/results/figures` directories. 
+
+### 4. Comparing and Plotting the Distributions of Properties in Dataset
+
+-
+Run [03_Plots_Table_target_properties.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/03_Plots_Table_target_properties.ipynb)
+to get the summary of properties as a table and to plot the distributions.
+
+
