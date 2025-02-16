@@ -55,14 +55,21 @@ Follow this with
 Run [03_Plots_Table_target_properties.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/03_Plots_Table_target_properties.ipynb)
 to get the summary of properties as a table and to plot the distributions.
 
-### 5. Implementing `SortedStepForwardCV` and `UnsortedStepForwardCV`
+## Method: Data Splitting
+
+### 1. Implementing `SortedStepForwardCV` and `UnsortedStepForwardCV`
 
 Run [04_Implementation_SFCV.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/04_Implementation_SFCV.ipynb)
   to visualise how SortedStepForwardCV and UnsortedStepForwardCV work.
 
-### 6. Implementing `ScaffoldSplitCV`
+### 2. Implementing `ScaffoldSplitCV`
 
 Run [05_Implementation_ScaffoldSplitCV.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/05_Implementation_ScaffoldSplitCV.ipynb)
 to check how ScaffoldSplitCV works. The algorithm groups molecules by their chemical scaffolds, shuffles these groups,
 and sequentially assigns entire scaffold groups to the training set until a target fraction is reached, with the
 remaining groups forming the test set.
+
+### 3. Implementing `RandomSplitCV`
+
+Run [06_Implementation_RandomSplitCV.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/06_Implementation_RandomSplitCV.ipynb)
+to check how RandomSplitCV works.
