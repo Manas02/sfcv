@@ -73,3 +73,8 @@ remaining groups forming the test set.
 
 Run [06_Implementation_RandomSplitCV.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/06_Implementation_RandomSplitCV.ipynb)
 to check how RandomSplitCV works.
+
+### 4. Plotting Chemical Space wrt Split Type
+
+Run [08_Plots_chemical_space_across_split.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/08_Plots_chemical_space_across_split.ipynb)
+to visualise chemical space wrt Split types.
