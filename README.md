@@ -83,3 +83,8 @@ to visualise number of molecules in test set across folds across targets.
 
 Run [08_Plots_chemical_space_across_split.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/08_Plots_chemical_space_across_split.ipynb)
 to visualise chemical space wrt Split types.
+
+### 6. Plotting & Comparing Distribution of Sorting properties per Split type per Fold across Targets
+
+Run [09_Plots_Table_split_properties.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/09_Plots_Table_split_properties.ipynb)
+to visualise distributions of sorting properties wrt Split types per fold averaged over all targets.
