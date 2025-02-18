@@ -55,7 +55,9 @@ Follow this with
 Run [03_Plots_Table_target_properties.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/03_Plots_Table_target_properties.ipynb)
 to get the summary of properties as a table and to plot the distributions.
 
-## Method: Data Splitting
+# Method
+
+## 1. Data Splitting
 
 ### 1. Implementing `SortedStepForwardCV` and `UnsortedStepForwardCV`
 
@@ -88,3 +90,18 @@ to visualise chemical space wrt Split types.
 
 Run [09_Plots_Table_split_properties.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/09_Plots_Table_split_properties.ipynb)
 to visualise distributions of sorting properties wrt Split types per fold averaged over all targets.
+
+## 2. Metrics
+
+### 1. Implementing Discovery Yield
+
+Run [10_Implimentation_Discovery_Yield.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/10_Implimentation_Discovery_Yield.ipynb)
+to understand and visualise the illustrative example of discovery yield.
+
+### 2. Implementing Novelty Error
+
+Run [11_Implimentation_Novelty_Error.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/11_Implimentation_Novelty_Error.ipynb)
+to understand and visualise the illustrative example of novelty error.
+
+
+
