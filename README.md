@@ -55,6 +55,7 @@ Follow this with
 
 Run [03_Plots_Table_target_properties.ipynb](https://github.com/Manas02/sfcv/blob/main/notebook/03_Plots_Table_target_properties.ipynb)
 to get the summary of properties as a table and to plot the distributions.
+
 ---
 # Method
 
