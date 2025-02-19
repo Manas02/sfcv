@@ -1,15 +1,18 @@
 # Step Forward Cross Validation for Bioactivity Prediction
+
 ## Benchmark for hERG, MAP14K and VEGFR2 for 3 fingerprints (ECFP4, RDKit and AtomPair)
 
 import os
 
 import numpy as np
 import pandas as pd
+from joblib import Parallel, delayed
 from rdkit import Chem
 from rdkit.Chem import rdFingerprintGenerator
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.neural_network import MLPRegressor
 from tqdm import tqdm
+from tqdm_joblib import tqdm_joblib
 from xgboost import XGBRegressor
 
 from sfcv.datasplit import (
@@ -65,7 +68,6 @@ for smi in tqdm(molecule_set, desc="Computing Fingerprints"):
     smi2rdkit[smi] = compute_rdkit_fp(smi)
 
 ## Saving the split columns
-
 os.makedirs("./benchmark/data/final/", exist_ok=True)
 
 cv_splitters = {
@@ -113,8 +115,6 @@ for fname in tqdm(os.listdir("./benchmark/data/processed/"), desc="Processing Sp
 
 
 ## Models
-
-
 def mlp_regressor_factory(n_train, random_state=42):
     n_hidden = min(25, int(np.sqrt(n_train)))
     return MLPRegressor(
@@ -139,6 +139,54 @@ regressor_factories = [
 ]
 
 
+## Bulk Tanimoto Similarity
+def bulk_tanimoto_similarity(mol_fp: np.ndarray, list_of_fps: np.ndarray) -> np.ndarray:
+    intersection = np.sum(list_of_fps & mol_fp, axis=1)
+    union = np.sum(list_of_fps | mol_fp, axis=1)
+    return intersection / union
+
+
+## Let's Compute the Max Tanimoto Similarity for Test compounds with Train Compounds for each split and fold
+os.makedirs("./benchmark/data/novelty/", exist_ok=True)
+os.makedirs("./benchmark/data/results/", exist_ok=True)
+
+fp2map = {"ECFP4": smi2ecfp4, "RDKitFP": smi2rdkit, "AtomPairsFP": smi2atompair}
+
+for fname in tqdm(
+        os.listdir("./benchmark/data/final/"), desc="Processing Bulk Tanimoto Similarity"
+):
+    if not fname.endswith(".csv"):
+        continue
+
+    if os.path.exists(f"./benchmark/data/novelty/{fname}"):
+        continue
+
+    df = pd.read_csv(f"./benchmark/data/final/{fname}")
+    fold_cols = [col for col in df.columns if "_Fold_" in col]
+    new_columns = {}
+    for fp_name, fp_dict in fp2map.items():
+        X_full = np.vstack(df["standardized_smiles"].map(fp_dict).values)
+
+        for fold_col in fold_cols:
+            train_mask = (df[fold_col] == "Train").values
+            test_mask = (df[fold_col] == "Test").values
+
+            X_train = X_full[train_mask]
+            X_test = X_full[test_mask]
+
+            max_tcs = [
+                bulk_tanimoto_similarity(test_fp, X_train).max() for test_fp in X_test
+            ]
+            new_columns[f"{fold_col}_{fp_name}_Tc"] = pd.Series(
+                data=max_tcs, index=df.index[test_mask]
+            )
+
+    if new_columns:
+        new_cols_df = pd.DataFrame(new_columns, index=df.index)
+        df = pd.concat([df, new_cols_df], axis=1)
+        df.to_csv(f"./benchmark/data/novelty/{fname}")
+
+
 def process_regressor(regressor_factory, X_train, y_train, fingerprint_vals):
     regressor = regressor_factory(len(X_train))
     regressor.fit(X_train, y_train)
@@ -147,56 +195,57 @@ def process_regressor(regressor_factory, X_train, y_train, fingerprint_vals):
     return identifier, y_pred
 
 
-## Bulk Tanimoto Similarity
+def process_task(task):
+    fname, index, fold_col, fp_name, regressor_factory, X_train, y_train, X_full = task
+    model_name, preds = process_regressor(regressor_factory, X_train, y_train, X_full)
+    key = f"{fold_col}_{fp_name}_{model_name}"
+    return fname, key, preds, index
 
 
-def bulk_tanimoto_similarity(mol_fp: np.ndarray, list_of_fps: np.ndarray) -> np.ndarray:
-    intersection = np.sum(list_of_fps & mol_fp, axis=1)
-    union = np.sum(list_of_fps | mol_fp, axis=1)
-    return intersection / union
+tasks = []
 
+for fname in tqdm(os.listdir("./benchmark/data/novelty/"), desc="Gathering Tasks"):
+    if not fname.endswith(".csv"):
+        continue
+    if os.path.exists(f"./benchmark/data/results/{fname}"):
+        continue
 
-## Let's Train the models
+    df = pd.read_csv(f"./benchmark/data/novelty/{fname}")
+    fold_cols = [col for col in df.columns if ("_Fold_" in col and "_Tc" not in col)]
 
-os.makedirs("./benchmark/data/results/", exist_ok=True)
+    for fp_name, fp_dict in fp2map.items():
+        X_full = np.vstack(df["standardized_smiles"].map(fp_dict).values)
 
-fp2map = {"ECFP4": smi2ecfp4, "RDKitFP": smi2rdkit, "AtomPairsFP": smi2atompair}
+        for fold_col in fold_cols:
+            train_mask = (df[fold_col] == "Train").values
+            X_train = X_full[train_mask]
+            y_train = df.loc[train_mask, "pchembl_value"].values
 
-# Initialize a dictionary to hold new columns
-new_columns = {}
-
-for fname in tqdm(os.listdir("./benchmark/data/final/"), desc="Training"):
-    if fname.endswith(".csv"):
-        df = pd.read_csv(f"./benchmark/data/final/{fname}")
-
-        fold_cols = [i for i in df.columns if "_Fold_" in i]
-        for fold_col in tqdm(fold_cols, desc="Processing Splits and Folds"):
-            test_mask = df[fold_col] == "Test"
-            train_mask = df[fold_col] == "Train"
-
-            for fp, mapping in fp2map.items():
-                df[fp] = df["standardized_smiles"].map(mapping)
-                test_fps = np.vstack(df.loc[test_mask, fp].values)
-                train_fps = np.vstack(df.loc[train_mask, fp].values)
-                max_tcs = [
-                    max(bulk_tanimoto_similarity(test_fp, train_fps))
-                    for test_fp in test_fps
-                ]
-                tc_series = pd.Series(data=max_tcs, index=df.loc[test_mask].index)
-                new_columns[f"{fold_col}_{fp}_Tc"] = tc_series
-                X_train = np.vstack(df.loc[train_mask, fp].values)
-                y_train = df.loc[train_mask, "pchembl_value"].values
-                X = np.vstack(df[fp].values)
-
-                for regressor_factory in regressor_factories:
-                    model_name, preds = process_regressor(
-                        regressor_factory, X_train, y_train, X
+            for regressor_factory in regressor_factories:
+                tasks.append(
+                    (
+                        fname,
+                        df.index,
+                        fold_col,
+                        fp_name,
+                        regressor_factory,
+                        X_train,
+                        y_train,
+                        X_full,
                     )
-                    new_col_name = f"{fold_col}_{fp}_{model_name}"
-                    new_columns[new_col_name] = preds
+                )
 
-        if new_columns:
-            new_cols_df = pd.DataFrame(new_columns, index=df.index)
-            df = pd.concat([df, new_cols_df], axis=1)
+with tqdm_joblib(tqdm(desc="Processing tasks", total=len(tasks))):
+    results = Parallel(n_jobs=-1)(delayed(process_task)(task) for task in tasks)
 
-        df.to_csv(f"./benchmark/data/results/{fname}")
+file_results = {}
+for fname, key, preds, index in results:
+    if fname not in file_results:
+        file_results[fname] = {}
+    file_results[fname][key] = preds
+
+for fname, new_columns in file_results.items():
+    df = pd.read_csv(f"./benchmark/data/novelty/{fname}", index_col=0)
+    new_cols_df = pd.DataFrame(new_columns, index=df.index)
+    df = pd.concat([df, new_cols_df], axis=1)
+    df.to_csv(f"./benchmark/data/results/{fname}")
