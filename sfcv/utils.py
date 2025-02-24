@@ -1,4 +1,5 @@
 import os
+import pathlib
 
 import lightgbm as lgbm
 import molvs
@@ -7,6 +8,7 @@ from rdkit.Chem import rdMolDescriptors as rdmd
 from rdkit.Chem import rdchem, Descriptors
 
 RDLogger.DisableLog("rdApp.*")
+MODEL_PATH = pathlib.Path(__file__).parent / "logdmodel.txt"
 
 md = molvs.metal.MetalDisconnector()
 lfc = molvs.fragment.LargestFragmentChooser()
@@ -26,10 +28,10 @@ def standardize_smiles(smiles):
 
 
 class LogDPredictor:
-    def __init__(self, model_file_name="./logdmodel.txt"):
+    def __init__(self, model_file_name=MODEL_PATH):
         if not os.path.exists(model_file_name):
             raise FileNotFoundError(f"model file not found in {model_file_name}")
-        self.mdl = lgbm.Booster(model_file=model_file_name)
+        self.mdl = lgbm.Booster(model_file=str(model_file_name))
         self.descList = self.mdl.feature_name()
         self.fns = [(x, y) for x, y in Descriptors.descList if x in self.descList]
 
