@@ -5,6 +5,19 @@ These results include model predictions, tables, and images.
 Efforts are made to ensure reproducibility of this project.
 In case of undefined behaviour or errors in installing or benchmarking, please open an issue.
 ---
+
+# Install via PyPI
+
+```shell
+pip install sfcv
+```
+
+or
+
+```shell
+pip install git+https://github.com/Manas02/sfcv.git@main
+```
+
 ## Environment Setup
 
 This project uses [pyvenv](https://docs.python.org/3/library/venv.html) to manage python
