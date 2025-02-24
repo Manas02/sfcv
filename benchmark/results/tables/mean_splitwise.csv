@@ -1,0 +1,8 @@
+r2,r2,rmse,rmse,novelty_err,novelty_err,discovery_yield,discovery_yield,number of discovery compounds,number of discovery compounds,number of discovery compounds within error range,number of discovery compounds within error range,number of novel compounds,number of novel compounds,number of novel discovery compounds,number of novel discovery compounds,number of novel discovery compounds within error range,number of novel discovery compounds within error range,number of test compounds,number of test compounds,number of train compounds,number of train compounds,mean train pchembl value,mean train pchembl value,mean test pchembl value,mean test pchembl value
+mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std
+0.53,0.47,0.7,0.19,1.06,0.72,0.61,0.17,29.04,23.99,18.31,16.36,1.5,2.07,0.46,0.76,0.1,0.35,65.07,46.64,580.94,420.3,6.83,0.6,6.83,0.61
+-0.09,3.8,0.84,0.29,0.97,0.57,0.46,0.23,30.07,25.53,15.04,15.17,7.15,11.83,2.32,4.95,0.59,1.96,66.0,46.15,580.01,420.96,6.83,0.6,6.86,0.73
+0.13,1.34,0.87,0.32,1.08,0.62,0.48,0.21,29.02,24.51,15.05,14.51,6.53,9.0,2.25,3.83,0.51,1.18,64.55,46.7,323.98,311.19,6.82,0.66,6.84,0.66
+0.04,1.26,0.9,0.33,1.12,0.62,0.49,0.22,28.5,24.45,14.79,14.31,7.49,9.0,2.66,4.14,0.65,1.5,64.55,46.7,323.98,311.19,6.93,0.66,6.81,0.69
+-0.5,2.61,1.01,0.45,1.08,0.63,0.38,0.24,30.14,26.81,12.6,14.01,14.64,19.23,5.46,8.26,1.12,2.32,64.55,46.7,323.98,311.19,6.58,0.65,6.89,0.75
+0.32,0.85,0.81,0.28,1.07,0.66,0.53,0.19,28.81,23.97,16.33,15.31,3.75,5.81,1.19,2.34,0.32,0.97,64.55,46.7,323.98,311.19,6.83,0.59,6.83,0.62
