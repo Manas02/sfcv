@@ -12,7 +12,7 @@ with open(req_path, encoding="utf-8") as f:
 
 setup(
     name="sfcv",
-    version="0.1.1",
+    version="0.1.4",
     description="Step Forward Cross Validation for Bioactivity Prediction",
     author="Manas Mahale",
     author_email="manas.m.mahale@gmail.com",

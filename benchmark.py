@@ -248,4 +248,4 @@ for fname, new_columns in file_results.items():
     df = pd.read_csv(f"./benchmark/data/novelty/{fname}", index_col=0)
     new_cols_df = pd.DataFrame(new_columns, index=df.index)
     df = pd.concat([df, new_cols_df], axis=1)
-    df.to_csv(f"./benchmark/data/results/{fname}")
+    df.to_csv(f"./benchmark/data/results/{fname}", index=False)

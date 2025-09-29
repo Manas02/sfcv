@@ -16,7 +16,7 @@ class SortedStepForwardCV:
         if self.ideal is not None:
             # Compute the absolute distance from the ideal value.
             distances = (df[self.sorting_col] - self.ideal).abs()
-            # Stable sort based on distance (lower is better)
+            # Stable sort based on distance
             sorted_idx = np.argsort(distances, kind="stable")
         else:
             # Use the property value directly, taking into account the desired order.

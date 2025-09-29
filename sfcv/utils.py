@@ -23,7 +23,7 @@ def standardize_smiles(smiles):
     std_mol = uc.uncharge(std_mol)
     std_smi = Chem.MolToSmiles(std_mol)
     if not molvs.validate.validate_smiles(std_smi):
-        #     std_smi = molvs.standardize.canonicalize_tautomer_smiles(std_smi) # Too Slow
+        std_smi = molvs.standardize.canonicalize_tautomer_smiles(std_smi)
         return std_smi
 
 
